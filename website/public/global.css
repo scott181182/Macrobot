@@ -4,6 +4,22 @@ html, body {
 	height: 100%;
 }
 
+
+.nav {
+    padding-left: 0.5rem !important;
+    padding-top: 0.5rem !important;
+    border-color: #6c757d;
+}
+.nav-link:not(.active) {
+    border-color: #6c757d;
+    color: #6c757d !important;
+}
+.nav-link.active {
+    /* border-color: #343a40 !important; */
+    border-color: #6c757d #6c757d #343a40 !important;
+    color: white !important;
+}
+/*
 body {
 	color: #333;
 	margin: 0;
@@ -60,4 +76,4 @@ button:not(:disabled):active {
 
 button:focus {
 	border-color: #666;
-}
+} */
