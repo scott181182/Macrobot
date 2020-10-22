@@ -7,7 +7,12 @@
         "url": "https://github.com/scott181182/Macrobot",
         "directory": "website"
     },
-    "license": "MIT",
+    "license": "AGPL-3.0-or-later",
+    "private": "true",
+    "author": "Scott Fasone <scott181182@yahoo.com>",
+    "contributors": [
+        "Nolan Rosen <nolanrosen15@gmail.com>"
+    ],
     "scripts": {
         "build": "rollup -c",
         "dev": "rollup -c -w",
