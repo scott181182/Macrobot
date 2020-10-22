@@ -1,8 +1,9 @@
 <script lang="ts">
-import { getContext } from "svelte";
+import { getContext, onMount } from "svelte";
 import MacroConfig from "./MacroConfig.svelte";
 
 import MacroButton from "./MacroButton";
+import { WSClient } from "./api";
 // import { longpress } from "./util";
 
 const { open } = getContext("simple-modal");
@@ -22,7 +23,12 @@ function makeGrid(rows: number, cols: number): MacroButton[][]
 }
 
 let btnGrid: MacroButton[][] = makeGrid(3, 4);
+let wsClient: WSClient;
 
+onMount(async () => {
+    // This is a test websocket server. Change this to the right endpoint.
+    wsClient = await WSClient.connect("ws://localhost:5001");
+});
 
 
 
@@ -30,7 +36,7 @@ function clickHandler(macroBtn: MacroButton)
 {
     return () => {
         if(macroBtn.macro) {
-            macroBtn.execute();
+            macroBtn.execute(wsClient);
         } else {
             open(MacroConfig, { macroBtn }, {  }, {
                 onClosed: () => {

@@ -1,3 +1,4 @@
+import type { WSClient } from "./api";
 
 
 export default class MacroButton
@@ -18,10 +19,11 @@ export default class MacroButton
 
 
 
-    public execute()
+    public execute(client: WSClient)
     {
         if(this.macro) {
             console.log(this.macro);
+            client.send(this.macro);
         } else {
             console.log("Configure!");
         }
