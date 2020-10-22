@@ -1,7 +1,10 @@
 use std::time::{ Duration, Instant };
+
 use actix::{ Actor, StreamHandler, ActorContext, AsyncContext };
 use actix_web::{ web, get, HttpRequest, HttpResponse, Error };
 use actix_web_actors::ws;
+
+use enigo::{ KeyboardControllable, Enigo };
 
 /// How often heartbeat pings are sent
 const HEARTBEAT_INTERVAL: Duration = Duration::from_secs(5);
@@ -20,7 +23,8 @@ async fn init_ws(
 pub struct MacrobotWS {
     /// Client must send ping at least once per 10 seconds (CLIENT_TIMEOUT),
     /// otherwise we drop connection.
-    hb: Instant
+    hb: Instant,
+    enigo: Enigo
 }
 
 impl Actor for MacrobotWS {
@@ -48,7 +52,13 @@ impl StreamHandler<Result<ws::Message, ws::ProtocolError>> for MacrobotWS {
                 self.hb = Instant::now()
             },
             // Right now any message recieved is just returned
-            Ok(ws::Message::Text(text)) => ctx.text(text),
+            Ok(ws::Message::Text(text)) => {
+                debug!("WS Message: {}", text);
+                match self.enigo.key_sequence_parse_try(&text) {
+                    Ok(_) => ctx.text("Success"),
+                    Err(e) => ctx.text(format!("Error: {}", e))
+                }
+            },
             Ok(ws::Message::Binary(bin)) => ctx.binary(bin),
             Ok(ws::Message::Close(reason)) => {
                 ctx.close(reason);
@@ -61,7 +71,7 @@ impl StreamHandler<Result<ws::Message, ws::ProtocolError>> for MacrobotWS {
 
 impl MacrobotWS {
     fn new() -> Self {
-        Self { hb: Instant::now() }
+        Self { hb: Instant::now(), enigo: Enigo::new() }
     }
 
     fn hb(&self, ctx: &mut <Self as Actor>::Context) {
