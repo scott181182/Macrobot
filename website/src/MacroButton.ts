@@ -21,11 +21,6 @@ export default class MacroButton
 
     public execute(client: WSClient)
     {
-        if(this.macro) {
-            console.log(this.macro);
-            client.send(this.macro);
-        } else {
-            console.log("Configure!");
-        }
+        client.send(this.macro);
     }
 }

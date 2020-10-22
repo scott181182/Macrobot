@@ -37,7 +37,8 @@ export class WSClient
 
     public send(message: string)
     {
-        this.socket.send(`[sent] ${message}`);
+        this.socket.send(message);
+        console.log(`[sent] ${message}`);
     }
 
     private handleMessage(event: MessageEvent)

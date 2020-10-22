@@ -58,8 +58,8 @@ function configureMacro(macroBtn: MacroButton)
                     <div class="btn-container">
                         <button class="macro-btn"
                             use:clicker
-                            on:shortclick={e => executeMacro(macroBtn)}
-                            on:longclick={e => configureMacro(macroBtn)}>
+                            on:shortclick={_ => executeMacro(macroBtn)}
+                            on:longclick={_ => configureMacro(macroBtn)}>
                         {macroBtn.label}
                     </button>
                     </div>
