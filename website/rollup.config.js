@@ -45,7 +45,12 @@ export default {
 			// we'll extract any component CSS out into
 			// a separate file - better for performance
 			css: css => { css.write('bundle.css'); },
-			preprocess: sveltePreprocess(),
+            preprocess: sveltePreprocess(),
+            onwarn: (warning, handler) => {
+                const { code, frame } = warning;
+                if(code === "css-unused-selector") { return; }
+                handler(warning);
+            }
 		}),
 
 		// If you have external dependencies installed from
@@ -55,7 +60,7 @@ export default {
 		// https://github.com/rollup/plugins/tree/master/packages/commonjs
 		resolve({
 			browser: true,
-			dedupe: ['svelte']
+			dedupe: [ "svelte", "svelte/transition", "svelte/internal" ]
 		}),
 		commonjs(),
 		typescript({
