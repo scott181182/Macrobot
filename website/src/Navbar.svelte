@@ -29,5 +29,10 @@ $: panels = controller.panels;
             </NavLink>
         </NavItem>
     {/each}
-    <!-- <button><i class="fa fa-2x fa-cog"></i></button> -->
+    <NavItem>
+        <NavLink class="bg-dark">
+            <i class="fa fa-cog"></i>
+        </NavLink>
+    </NavItem>
+    <!-- <button></button> -->
 </Nav>
