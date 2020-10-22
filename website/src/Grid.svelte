@@ -27,7 +27,7 @@ let wsClient: WSClient;
 
 onMount(async () => {
     // This is a test websocket server. Change this to the right endpoint.
-    wsClient = await WSClient.connect("ws://localhost:5001");
+    wsClient = await WSClient.connect(`ws://${window.location.host}/ws/`);
 });
 
 
