@@ -37,11 +37,11 @@ export class WSClient
 
     public send(message: string)
     {
-        this.socket.send(message);
+        this.socket.send(`[sent] ${message}`);
     }
 
-    private handleMessage(event: MessageEvent<any>)
+    private handleMessage(event: MessageEvent)
     {
-        console.log(event.data);
+        console.log(`[recv] ${event.data}`);
     }
 }

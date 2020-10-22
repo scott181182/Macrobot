@@ -4,7 +4,7 @@ import MacroConfig from "./MacroConfig.svelte";
 
 import MacroButton from "./MacroButton";
 import { WSClient } from "./api";
-// import { longpress } from "./util";
+import { clicker } from "./util";
 
 const { open } = getContext("simple-modal");
 
@@ -32,20 +32,19 @@ onMount(async () => {
 
 
 
-function clickHandler(macroBtn: MacroButton)
+function executeMacro(macroBtn: MacroButton)
 {
-    return () => {
-        if(macroBtn.macro) {
-            macroBtn.execute(wsClient);
-        } else {
-            open(MacroConfig, { macroBtn }, {  }, {
-                onClosed: () => {
-                    console.log("Oof")
-                    btnGrid = btnGrid;
-                }
-            });
-        }
+    if(macroBtn.macro) {
+        macroBtn.execute(wsClient);
+    } else {
+        configureMacro(macroBtn);
     }
+}
+function configureMacro(macroBtn: MacroButton)
+{
+    open(MacroConfig, { macroBtn }, {  }, {
+        onClosed: () => { btnGrid = btnGrid; }
+    });
 }
 
 </script>
@@ -58,7 +57,9 @@ function clickHandler(macroBtn: MacroButton)
                 {#each btnRow as macroBtn}
                     <div class="btn-container">
                         <button class="macro-btn"
-                            on:click={clickHandler(macroBtn)}>
+                            use:clicker
+                            on:shortclick={e => executeMacro(macroBtn)}
+                            on:longclick={e => configureMacro(macroBtn)}>
                         {macroBtn.label}
                     </button>
                     </div>
@@ -80,11 +81,13 @@ function clickHandler(macroBtn: MacroButton)
     }
     .btn-row {
         width: 100%;
+        flex: 1 1;
         flex-grow: 1;
         display: flex;
         flex-direction: row;
     }
     .btn-container {
+        flex: 1 1;
         flex-grow: 1;
 
         padding: 1rem;
@@ -92,5 +95,8 @@ function clickHandler(macroBtn: MacroButton)
     .macro-btn {
         width: 100%;
         height: 100%;
+
+        border-radius: 1rem;
+        background-color: #999;
     }
 </style>
