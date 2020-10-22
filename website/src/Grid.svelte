@@ -2,11 +2,14 @@
 import { getContext, onMount } from "svelte";
 import MacroConfig from "./MacroConfig.svelte";
 
+import type ButtonPanel from "./ButtonPanel";
 import MacroButton from "./MacroButton";
 import { WSClient } from "./api";
 import { clicker } from "./util";
 
 const { open } = getContext("simple-modal");
+
+export let panel: ButtonPanel;
 
 
 
@@ -22,7 +25,7 @@ function makeGrid(rows: number, cols: number): MacroButton[][]
     return grid;
 }
 
-let btnGrid: MacroButton[][] = makeGrid(3, 4);
+$: btnGrid = panel.buttons;
 let wsClient: WSClient;
 
 onMount(async () => {
@@ -50,35 +53,24 @@ function configureMacro(macroBtn: MacroButton)
 </script>
 
 
-<main>
-    <section id="btn-grid">
-        {#each btnGrid as btnRow}
-            <div class="btn-row">
-                {#each btnRow as macroBtn}
-                    <div class="btn-container">
-                        <button class="macro-btn"
-                            use:clicker
-                            on:shortclick={_ => executeMacro(macroBtn)}
-                            on:longclick={_ => configureMacro(macroBtn)}>
-                        {macroBtn.label}
-                    </button>
-                    </div>
-                {/each}
-            </div>
-        {/each}
-    </section>
-</main>
+<section class="fluid-container d-flex flex-column h-100">
+    {#each btnGrid as btnRow}
+        <div class="btn-row">
+            {#each btnRow as macroBtn}
+                <div class="btn-container">
+                    <button class="macro-btn btn-secondary"
+                        use:clicker
+                        on:shortclick={_ => executeMacro(macroBtn)}
+                        on:longclick={_ => configureMacro(macroBtn)}>
+                    {macroBtn.label}
+                </button>
+                </div>
+            {/each}
+        </div>
+    {/each}
+</section>
 
 <style>
-    main {
-        width: 100%;
-        height: 100%;
-    }
-    #btn-grid {
-        display: flex;
-        flex-direction: column;
-        height: 100%;
-    }
     .btn-row {
         width: 100%;
         flex: 1 1;
@@ -97,6 +89,6 @@ function configureMacro(macroBtn: MacroButton)
         height: 100%;
 
         border-radius: 1rem;
-        background-color: #999;
+        /* background-color: #999; */
     }
 </style>

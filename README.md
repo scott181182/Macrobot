@@ -5,20 +5,26 @@ server, so you'll need netcat, telnet, or another similar utility to actually se
 
 ## Building
 
-This tool uses Make (yes I know it should use Ant or Maven) for building. Simply run `make` or `make build` in the
-project directory and it'll generate a `Macrobot.jar` file.
+This tool uses Make (yes I know it should use Ant or Maven) for building. Simply run `npm install` and `npm run build` in the
+project's `website` directory and it'll generate the public files in `website/public`.
 
-The entry point to the program is in `src/sgf/App.java`.
+### Cross Compiling
 
-## Running
+Ensure you have cross installed (`cargo install cross`) and have the docker
+daemon running (`sudo systemctl start docker`). If you are on windows see: 
+https://docs.docker.com/docker-for-windows/wsl/
 
-Running can be done with make or with java directly:
+`cross build --target x86_64-pc-windows-gnu`
+
+Move the compiled exe from the `target/x86_64-pc-windows-gnu` folder to the 
+project root. Run the exe and you should see the site at `localhost:8073`.
+
+
+## Native Compilation
 ```shell
-make run
+cargo run
 ```
-```shell
-java -jar Macrobot.jar
-```
+
 
 ## How to Use
 
