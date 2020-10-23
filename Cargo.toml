@@ -1,7 +1,10 @@
 [package]
 name = "macrobot"
-version = "0.1.0"
-authors = ["Nolan Rosen <nolanrosen15@gmail.com>", "Scott Fasone"]
+version = "0.0.1"
+authors = [
+    "Nolan Rosen <nolanrosen15@gmail.com>",
+    "Scott Fasone <scott181182@yahoo.com>"
+]
 edition = "2018"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html

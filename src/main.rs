@@ -5,11 +5,12 @@ extern crate log;
 use actix_files::Files;
 use actix_web::{ get, web, App, HttpServer, Responder };
 
-const HOST: &str = "0.0.0.0";
-const PORT: u16 = 8073;
-
+mod macro_dsl;
 mod websocket;
 use websocket::init_ws;
+
+const HOST: &str = "0.0.0.0";
+const PORT: u16 = 8073;
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {

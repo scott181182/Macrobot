@@ -1,0 +1,43 @@
+
+
+
+@import "../node_modules/bootstrap/scss/functions";
+@import "../node_modules/bootstrap/scss/variables";
+@import "../node_modules/bootstrap/scss/mixins";
+
+$body-bg: $dark;
+
+@import "../node_modules/bootstrap/scss/images";
+@import "../node_modules/bootstrap/scss/reboot";
+@import "../node_modules/bootstrap/scss/root";
+@import "../node_modules/bootstrap/scss/type";
+@import "../node_modules/bootstrap/scss/utilities";
+
+@import "../node_modules/bootstrap/scss/buttons";
+@import "../node_modules/bootstrap/scss/nav";
+
+
+
+html, body {
+	width: 100%;
+	height: 100%;
+}
+
+
+
+.nav {
+    padding-left: 0.5rem !important;
+    padding-top: 0.5rem !important;
+    border-color: $secondary;
+}
+.nav-link:not(.active) {
+    border-color: $secondary;
+    color: $secondary !important;
+}
+.nav-link.active {
+    border-color: $secondary $secondary $dark !important;
+    color: white !important;
+}
+.nav-link:hover, .nav-link:focus {
+	background-color: $dark !important;
+}

@@ -1,11 +1,11 @@
 <script lang="ts">
 import Modal from "svelte-simple-modal";
 
-import Grid from "./Grid.svelte";
-import Navbar from "./Navbar.svelte";
+import Grid from "./components/Grid.svelte";
+import Navbar from "./components/Navbar.svelte";
 
-import ButtonPanel from "./ButtonPanel";
-import PanelController from "./PanelController";
+import ButtonPanel from "./model/ButtonPanel";
+import PanelController from "./model/PanelController";
 
 
 
@@ -21,9 +21,10 @@ function selectPanel(panel: ButtonPanel) {
 </script>
 
 <Modal>
-    <main class="bg-dark">
+    <main>
         <Navbar
             controller={controller}
+            on:panelchange={e => controller = controller}
             on:changepanel={e => selectPanel(e.detail.panel)}/>
         <Grid panel={controller.activePanel}/>
     </main>

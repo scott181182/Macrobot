@@ -1,29 +1,17 @@
 <script lang="ts">
 import { getContext, onMount } from "svelte";
-import MacroConfig from "./MacroConfig.svelte";
+import MacroConfig from "./modals/MacroConfig.svelte";
 
-import type ButtonPanel from "./ButtonPanel";
-import MacroButton from "./MacroButton";
-import { WSClient } from "./api";
-import { clicker } from "./util";
+import type ButtonPanel from "../model/ButtonPanel";
+import type MacroButton from "../model/MacroButton";
+import { WSClient } from "../api";
+import { clicker } from "../util";
 
 const { open } = getContext("simple-modal");
 
 export let panel: ButtonPanel;
 
 
-
-function makeGrid(rows: number, cols: number): MacroButton[][]
-{
-    const grid: MacroButton[][] = new Array(rows);
-    for(let row = 0; row < rows; row++) {
-        grid[row] = new Array(cols);
-        for(let col = 0; col < cols; col++) {
-            grid[row][col] = MacroButton.default();
-        }
-    }
-    return grid;
-}
 
 $: btnGrid = panel.buttons;
 let wsClient: WSClient;
