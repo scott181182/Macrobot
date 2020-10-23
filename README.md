@@ -1,12 +1,15 @@
 # Macrobot
 
-This is currently a proof-of-concept for a TCP server which can execute key macros as sent to it. This is ONLY the
-server, so you'll need netcat, telnet, or another similar utility to actually send it commands.
+This is currently a proof-of-concept for a TCP server and web client which can
+execute key macros as sent to it.
 
-## Building
+## Getting Started
 
-This tool uses Make (yes I know it should use Ant or Maven) for building. Simply run `npm install` and `npm run build` in the
-project's `website` directory and it'll generate the public files in `website/public`.
+A `cargo run` will server the application and website.
+
+If changing the website code. Simply run `npm install` and `npm run build` in 
+the project's `website` directory and it'll generate the public files in
+`website/public` and `cargo run` will serve the new files.
 
 ### Cross Compiling
 
@@ -19,23 +22,24 @@ https://docs.docker.com/docker-for-windows/wsl/
 Move the compiled exe from the `target/x86_64-pc-windows-gnu` folder to the 
 project root. Run the exe and you should see the site at `localhost:8073`.
 
+### Linux Dependencies
 
-## Native Compilation
-```shell
-cargo run
-```
+Linux users may have to install libxdo-dev. For example, on Ubuntu:
 
+`apt install libxdo-dev`
 
 ## How to Use
 
-The program currently listens on TCP port 8073. Clients can connect and send Unicode, line-delimited messages to the
-server. The server currently support three commands:
+The program currently listens on TCP port 8073. Clients can connect and send
+Unicode, line-delimited messages to the server. The server currently support
+three commands:
 * `exit`: disconnects the client
 * `quit`: disconnects the client AND shuts down the server
 * `key <key command>`: executes the given key command on the server
 
-All messages are converted to lowercase, so no need to worry about case sensitivity. So, if you want to type a capital
-letter, you have to send it with the `shift` modifier.
+All messages are converted to lowercase, so no need to worry about case
+sensitivity. So, if you want to type a capital letter, you have to send it with
+the `shift` modifier.
 
 ### Key Commands
 
