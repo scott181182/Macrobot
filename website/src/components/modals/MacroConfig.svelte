@@ -1,5 +1,5 @@
 <script lang="ts">
-import type MacroButton from "./MacroButton";
+import type MacroButton from "../../model/MacroButton";
 
 export let macroBtn: MacroButton;
 

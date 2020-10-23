@@ -1,4 +1,4 @@
-import type { WSClient } from "./api";
+import type { WSClient } from "../api";
 
 
 export default class MacroButton

@@ -1,4 +1,3 @@
-import { Button } from "sveltestrap";
 import ButtonPanel from "./ButtonPanel";
 
 
