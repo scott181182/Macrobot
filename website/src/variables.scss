@@ -1,0 +1,10 @@
+@import "../node_modules/bootstrap/scss/functions";
+@import "../node_modules/bootstrap/scss/variables";
+@import "../node_modules/bootstrap/scss/mixins";
+
+$body-bg: $dark;
+
+$modal-content-color: white;
+$modal-content-bg: $secondary;
+$modal-content-border-color: $dark;
+$modal-content-border-width: 2px;

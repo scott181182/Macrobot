@@ -1,7 +1,8 @@
 <script lang="ts">
-import Modal from "svelte-simple-modal";
+import { setContext } from "svelte";
 
 import Grid from "./components/Grid.svelte";
+import MacroModel from "./components/MacroModal.svelte";
 import Navbar from "./components/Navbar.svelte";
 
 import ButtonPanel from "./model/ButtonPanel";
@@ -10,25 +11,28 @@ import PanelController from "./model/PanelController";
 
 
 let controller = new PanelController(
-    ButtonPanel.default("Panel 1"),
-    ButtonPanel.default("Panel 2")
+    ButtonPanel.default("Panel 1")
 );
 
+function updateApp() { controller = controller; }
+function addPanel() {
+    const panelIndex = controller.panels.length + 1;
+    controller.panels.push(ButtonPanel.default(`Panel ${panelIndex}`));
+    updateApp();
+}
 function selectPanel(panel: ButtonPanel) {
     controller.changePanel(panel);
-    controller = controller;
+    updateApp();
 }
+setContext("macrobot", { addPanel, selectPanel, updateApp });
 </script>
 
-<Modal>
+<MacroModel>
     <main>
-        <Navbar
-            controller={controller}
-            on:panelchange={e => controller = controller}
-            on:changepanel={e => selectPanel(e.detail.panel)}/>
+        <Navbar controller={controller}/>
         <Grid panel={controller.activePanel}/>
     </main>
-</Modal>
+</MacroModel>
 <style>
     main {
         width: 100%;
@@ -36,9 +40,6 @@ function selectPanel(panel: ButtonPanel) {
 
         display: flex;
         flex-direction: column;
-        /* background-color: #4a4a4a; */
     }
-    Navbar {
-        flex: 0 0;
-    }
+    Navbar { flex: 0 0; }
 </style>

@@ -1,40 +1,96 @@
-use std::convert::TryFrom;
+use std::fmt;
+use std::str::FromStr;
+
 use enigo::KeyboardControllable;
 
+
+
 mod keys;
+use keys::MacrobotKey;
+
 mod errors;
 pub use errors::ParseError;
 
-#[derive(Clone, Eq, PartialEq, Ord, PartialOrd, Hash, Debug)]
+
+
+#[derive(Clone, Eq, PartialEq, Debug)]
+pub struct KeyCommandGroup {
+    commands: Vec<KeyCommand>
+}
+
+impl KeyCommandGroup
+{
+    pub fn execute(&self, enigo: &mut enigo::Enigo) {
+        for command in self.commands.iter() {
+            command.execute(enigo);
+        }
+    }
+
+    pub fn to_command_string(&self) -> String {
+        self.commands.iter()
+            .map(KeyCommand::to_command_string)
+            .collect::<Vec<String>>()
+            .join(" ")
+    }
+}
+
+impl FromStr for KeyCommandGroup
+{
+    type Err = ParseError;
+
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        let command_results: Result<Vec<KeyCommand>, ParseError> = s.split(' ')
+            .map(str::parse::<KeyCommand>)
+            .collect();
+        Ok(KeyCommandGroup{ commands: command_results? })
+    }
+}
+impl fmt::Display for KeyCommandGroup
+{
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        write!(f, "KeyCommandGroup({})", self.to_command_string())
+    }
+}
+
+
+
+#[derive(Clone, Eq, PartialEq, Debug)]
 pub struct KeyCommand {
-    modifiers: Vec<keys::ModifierKeys>,
-    key: keys::Key
+    keys: Vec<MacrobotKey>
 }
 
-pub fn parse(command: &str) -> Result<KeyCommand, ParseError> {
-    let mut cmd_iter: Vec<&str> = command.split('+').collect();
-    // Parsing the key (removes it from the vector)
-    let key = cmd_iter.pop().ok_or(ParseError::Unexpected)?;
-    if key.len() != 1 {
-        return Err(ParseError::InvalidKeyLength(key.to_owned()))
+impl KeyCommand
+{
+    pub fn execute(&self, enigo: &mut enigo::Enigo) {
+        for key in self.keys.iter() {
+            enigo.key_down((*key).into());
+        }
+        for key in self.keys.iter() {
+            enigo.key_up((*key).into());
+        }
     }
-    let key = key.chars().next().ok_or(ParseError::Unexpected)?;
-    let key = keys::Key(key);
-    // Parsing the key modifiers
-    let mut modifiers = Vec::new();
-    for modifier_str in cmd_iter {
-        let modifier = keys::ModifierKeys::try_from(modifier_str)?;
-        modifiers.push(modifier);
+    pub fn to_command_string(&self) -> String {
+        self.keys.iter()
+            .map(MacrobotKey::to_key_string)
+            .collect::<Vec<String>>()
+            .join("+")
     }
-    Ok(KeyCommand{ modifiers, key })
 }
 
-pub fn execute(command: &KeyCommand, enigo: &mut enigo::Enigo) {
-    for modifier in command.modifiers.iter() {
-        enigo.key_down((*modifier).into());
+impl FromStr for KeyCommand
+{
+    type Err = ParseError;
+
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        let key_results: Result<Vec<MacrobotKey>, _> = s.split('+')
+            .map(str::parse::<MacrobotKey>)
+            .collect();
+        Ok(KeyCommand{ keys: key_results? })
     }
-    enigo.key_click(command.key.into());
-    for modifier in command.modifiers.iter() {
-        enigo.key_up((*modifier).into());
+}
+impl fmt::Display for KeyCommand
+{
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        write!(f, "KeyCommand({})", self.to_command_string())
     }
 }

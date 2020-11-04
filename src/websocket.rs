@@ -3,10 +3,11 @@ use std::time::{ Duration, Instant };
 use actix::{ Actor, StreamHandler, ActorContext, AsyncContext };
 use actix_web::{ web, get, HttpRequest, HttpResponse, Error };
 use actix_web_actors::ws;
-
 use enigo::Enigo;
 
-use crate::macro_dsl::{ parse, execute };
+use crate::macro_dsl::{ KeyCommandGroup };
+
+
 
 /// How often heartbeat pings are sent
 const HEARTBEAT_INTERVAL: Duration = Duration::from_secs(5);
@@ -55,15 +56,15 @@ impl StreamHandler<Result<ws::Message, ws::ProtocolError>> for MacrobotWS {
             },
             Ok(ws::Message::Text(text)) => {
                 debug!("[Recv] WS Message: {}", text);
-                let cmd = match parse(&text) {
+                let command_group = match text.parse::<KeyCommandGroup>() {
                     Ok(x) => x,
                     Err(e) => {
                         error!("{}", e);
                         return ctx.text(format!("Error: {}", e))
                     }
                 };
-                info!("Executing key command: {:?}", cmd);
-                execute(&cmd, &mut self.enigo);
+                info!("Executing key command group: {}", command_group);
+                command_group.execute(&mut self.enigo);
                 ctx.text("Success");
             },
             Ok(ws::Message::Binary(bin)) => ctx.binary(bin),
