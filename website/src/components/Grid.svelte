@@ -7,7 +7,9 @@ import type MacroButton from "../model/MacroButton";
 import { WSClient } from "../api";
 import { clicker } from "../util";
 
-const { open } = getContext("simple-modal");
+const { open } = getContext("macromodal");
+
+
 
 export let panel: ButtonPanel;
 
@@ -33,8 +35,9 @@ function executeMacro(macroBtn: MacroButton)
 }
 function configureMacro(macroBtn: MacroButton)
 {
-    open(MacroConfig, { macroBtn }, {  }, {
-        onClosed: () => { btnGrid = btnGrid; }
+    open(MacroConfig, {
+        macroBtn,
+        onsave: () => { btnGrid = btnGrid; }
     });
 }
 

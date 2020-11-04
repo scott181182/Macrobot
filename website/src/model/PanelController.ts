@@ -26,4 +26,12 @@ export default class PanelController
         if(!this.panels.includes(panel)) { this.panels.push(panel); }
         this.active = panel;
     }
+    public deletePanel(panel: ButtonPanel) {
+        if(this.panels.length <= 1) { return console.log("Cannot remove the last button panel."); }
+        const index = this.panels.indexOf(panel);
+        if(this.active === panel) {
+            this.active = index > 0 ? this.panels[index - 1] : this.panels[index + 1];
+        }
+        this.panels.splice(index, 1);
+    }
 }

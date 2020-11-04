@@ -9,7 +9,7 @@ export default class MacroButton
         public label: string,
         public macro: string
     ) {
-
+        
     }
 
     public static default(): MacroButton
